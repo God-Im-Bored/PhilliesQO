@@ -1,0 +1,82 @@
+<div class='landing-main'>
+    <div class='landing-header'>
+        <h2>Phillies QO Evaluation</h2>
+        <h2>Salaries for {{year}} season</h2>
+    </div>
+    <div class='data-main'>
+        <a
+        id='data-link'
+        target='_blank'
+        href="https://questionnaire-148920.appspot.com/swe/data.html">
+            MLB Salary Data
+        </a>
+    </div>
+    <div class='chart-main'>
+        <canvas id='salaryChartPlot'></canvas>
+    </div>
+    
+    <script>
+        let chartData = {{{chartData}}}
+        let ctx = document.getElementById('salaryChartPlot').getContext('2d')
+        for (let i = 0; i < chartData.datasets.length; i++) {
+            chartData.datasets[i].backgroundColor = Chart.helpers.color(chartData.datasets[i].color).alpha(0.2).rgbString()
+        }
+        let scatterPlot = Chart.Scatter(ctx, {
+            data: {
+                datasets: chartData.datasets
+            },
+            options: {
+                legend: {
+                    onHover: function (event) {
+                        event.target.style.cursor = 'pointer'
+                    }
+                },
+                hover: {
+                    onHover: function (event) {
+                        const plot = this.getElementAtEvent(event)
+                        if (plot.length) {
+                            event.target.style.cursor = 'pointer'
+                        } else {
+                            event.target.style.cursor = 'default'
+                        }
+                    }
+                },
+                tooltips: {
+                    callbacks: {
+                        label: (tooltipItem, data) => {
+                            return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].label
+                        }
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            callback: (value, index, values) => {
+                                return formatter.format(value, 0)
+                            }
+                        }
+                    }],
+                    gridlines: {
+                        tickMarkLength: 100
+                    },
+                    xAxes: [{
+                        type: 'category',
+                        labels: chartData.xAxis,
+                        ticks: {
+                            autoskip: false,
+                            maxRoations: 0,
+                            callback: function (value, index, values) {
+                                return (value.length === 1) ? value : undefined
+                            }
+                        },
+                        fontStyle: 'normal',
+                        fontSize: 10,
+                        position: 'bottom'
+                    }]
+                }
+            }
+        })
+
+
+    </script>
+</div>
