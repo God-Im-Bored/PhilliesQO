@@ -2,6 +2,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const siteUrl = "https://questionnaire-148920.appspot.com/swe/data.html";
 
+
 module.exports = async (req, res) => {
   // initialize variables for storing: player metadata, qualifed/non-qualified data, labels for x axis, queue for players that pass QO threshold, and cumulative sum for total salary
   let metadata = [], datasets = [], xAxis = [], queue = [], totalSalary = 0;
@@ -30,6 +31,8 @@ module.exports = async (req, res) => {
   // initialize variable that stores cheerio object payload of designated html tag
   const $ = await fetchSiteData(siteUrl);
   const playerRows = $("table#salaries-table tbody tr");
+ 
+  
 
   // function that fetches player data from html payload (name, salary, year, level)/ return as text
   const fetchPlayerData = (elem, attr, type) => {
@@ -151,3 +154,5 @@ module.exports = async (req, res) => {
     misc: $("table#salaries-table tbody tr"),
   });
 };
+
+
